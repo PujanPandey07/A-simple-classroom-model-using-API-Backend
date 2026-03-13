@@ -26,8 +26,11 @@ class CourseInstructorViewSet(viewsets.ModelViewSet):
 
 
 class EnrollmentViewSet(viewsets.ModelViewSet):
-    queryset = Enrollment.objects.all()
     serializer_class = EnrollmentSerializer
+
+    def get_queryset(self):
+        course_id = self.kwargs['course_pk']
+        return Enrollment.objects.filter(course_id=course_id)
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
@@ -37,8 +40,16 @@ class EnrollmentViewSet(viewsets.ModelViewSet):
 
 
 class LessonViewSet(viewsets.ModelViewSet):
-    queryset = Lesson.objects.all()
+
     serializer_class = LessonSerializer
+
+    def get_queryset(self):
+        course_id = self.kwargs['course_pk']
+        return Lesson.objects.filter(course_id=course_id)
+
+    def perform_create(self, serializer):
+        course_id = self.kwargs['course_pk']
+        serializer.save(course_id=course_id)
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
