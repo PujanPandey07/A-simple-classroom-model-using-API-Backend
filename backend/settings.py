@@ -36,6 +36,22 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'EXCEPTION_HANDLER': 'Courses.exceptions.custom_exception_handler',
+    'DEFAULT_PAGINATION_CLASS': 'Courses.pagination.StandardPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',  # not logged in
+        'rest_framework.throttling.UserRateThrottle',  # logged in
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '30/hour',   # anonymous users: 30 requests per hour
+        'user': '300/hour',  # logged in users: 300 requests per hour
+    }
 }
 
 
@@ -51,6 +67,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'Courses',
+    'django-filters',
 
 
 ]
