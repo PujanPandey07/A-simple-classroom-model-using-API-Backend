@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+import debug_toolbar
+from django.conf import settings
 
 from accounts.views import RegisterView
 
@@ -25,3 +27,8 @@ urlpatterns = [
     path('api/', include('Courses.urls')),
     path('api/accounts', include('accounts.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ]
