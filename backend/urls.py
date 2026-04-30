@@ -26,7 +26,14 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include('Courses.urls')),
     path('api/accounts', include('accounts.urls')),
+    # login, logout, password reset
+    path('api/accounts/', include('dj_rest_auth.urls')),
+    path('api/accounts/registration/',
+         include('dj_rest_auth.registration.urls')),  # register + verify
+    path('api/accounts/', include('allauth.urls')
+         ),                # allauth internal urls
 ]
+
 
 if settings.DEBUG:
     urlpatterns += [
