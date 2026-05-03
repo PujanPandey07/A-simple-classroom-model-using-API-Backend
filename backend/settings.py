@@ -176,6 +176,10 @@ REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'access'
 JWT_AUTH_REFRESH_COOKIE = 'refresh'
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-a16182.up.railway.app',
+]
+
 # ── Password validation ────────────────────────────────
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
