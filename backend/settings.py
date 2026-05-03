@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'accounts',
     'Courses',
     'django_filters',
+    'drf_spectacular',
 ]
 
 if DEBUG:
@@ -124,7 +125,8 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '30/hour',
         'user': '300/hour',
-    }
+    },
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 # ── Cache ──────────────────────────────────────────────
