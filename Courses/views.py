@@ -27,21 +27,16 @@ class CourseViewSet(viewsets.ModelViewSet):
     ordering = ['-created_at']
 
     def list(self, request, *args, **kwargs):
-        # Create a unique cache key based on the request query params
-        # This way ?search=django and ?search=python have different caches
-        cache_key = f'courses_list_{request.query_params}'
+        # Clean the cache key — remove special characters
+        query_string = request.query_params.urlencode()
+        cache_key = f'courses_list_{query_string}' if query_string else 'courses_list_all'
 
-        # Try to get from cache first
         cached_data = cache.get(cache_key)
         if cached_data:
-            return Response(cached_data)  # return immediately, no database hit
+            return Response(cached_data)
 
-        # Not in cache — get from database the normal way
         response = super().list(request, *args, **kwargs)
-
-        # Store in cache for next time
         cache.set(cache_key, response.data, timeout=settings.CACHE_TTL)
-
         return response
 
     def perform_create(self, serializer):
