@@ -35,12 +35,14 @@ INSTALLED_APPS = [
     'Courses',
     'django_filters',
     'drf_spectacular',
+    'corsheaders',
 ]
 
 if DEBUG:
     INSTALLED_APPS += ['debug_toolbar']
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -128,6 +130,29 @@ REST_FRAMEWORK = {
     },
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'LMS Backend API',
+    'DESCRIPTION': '''
+A production-ready Learning Management System REST API.
+
+## Features
+- JWT Authentication with email verification
+- Role-based permissions (Student, Instructor, Admin)
+- Course and lesson management
+- Enrollment system
+- Filtering, search and pagination
+
+## Authentication
+Use the `/api/accounts/login/` endpoint to get a JWT token.
+Then click the **Authorize** button and enter: `Bearer your_token_here`
+    ''',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'CONTACT': {
+        'name': 'Pujan Pandey',
+        'url': 'https://github.com/yourusername',
+    },
+}
 
 # ── Cache ──────────────────────────────────────────────
 if os.getenv('REDIS_URL'):
@@ -148,6 +173,14 @@ else:
     }
 
 CACHE_TTL = 60 * 15
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = os.getenv(
+    'CORS_ALLOWED_ORIGINS',
+    'http://localhost:3000,http://localhost:5173'
+).split(',')
+
+CORS_ALLOW_CREDENTIALS = True
 
 # ── Celery ─────────────────────────────────────────────
 CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/0')
